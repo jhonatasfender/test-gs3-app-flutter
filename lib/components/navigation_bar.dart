@@ -15,7 +15,7 @@ class CustomNavigationBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       height: 100,
       width: double.infinity,
-      decoration: _buildContainerDecoration(isIOS),
+      decoration: buildContainerDecoration(isIOS),
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -32,24 +32,24 @@ class CustomNavigationBar extends StatelessWidget {
     );
   }
 
-  BoxDecoration _buildContainerDecoration(bool isIOS) {
+  BoxDecoration buildContainerDecoration(bool isIOS) {
     return BoxDecoration(
       color: Colors.white,
       borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(35.0),
         topRight: Radius.circular(35.0),
       ),
-      boxShadow: isIOS ? _buildIOSBoxShadow() : _buildAndroidBoxShadow(),
+      boxShadow: isIOS ? buildIOSBoxShadow() : buildAndroidBoxShadow(),
     );
   }
 
-  List<BoxShadow> _buildIOSBoxShadow() {
+  List<BoxShadow> buildIOSBoxShadow() {
     return [
       const BoxShadow(
         color: Colors.black,
         blurRadius: 9,
         spreadRadius: 3,
-        offset: const Offset(0, 3),
+        offset: Offset(0, 3),
         inset: true,
       ),
       const BoxShadow(
@@ -61,7 +61,7 @@ class CustomNavigationBar extends StatelessWidget {
     ];
   }
 
-  List<BoxShadow> _buildAndroidBoxShadow() {
+  List<BoxShadow> buildAndroidBoxShadow() {
     return [
       const BoxShadow(
         color: Colors.black,
