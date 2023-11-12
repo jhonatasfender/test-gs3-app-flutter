@@ -18,6 +18,7 @@ class CustomBadge extends StatelessWidget {
         SvgPicture.asset(
           'assets/icons/bell.svg',
           width: 22,
+          key: const Key('bellIcon'),
         ),
         if (notificationCount > 0)
           Positioned(

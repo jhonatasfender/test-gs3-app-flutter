@@ -17,7 +17,6 @@ class LastReleasesWidget extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             decoration: BoxDecoration(
-              color: Colors.white,
               borderRadius: BorderRadius.circular(8.0),
             ),
             child: Row(
@@ -50,28 +49,29 @@ class LastReleasesWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16.0),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Hoje, 05 Set',
-                style: AppStyles.lastReleasesDateStyle,
-              ),
-              const SizedBox(height: 12.0),
-              for (int i = 0; i < 3; i++)
-                Column(
-                  children: [
-                    const LastReleasesHistoryItem(),
-                    const SizedBox(height: 12.0),
-                    Container(
-                      height: 1.0,
-                      color: const Color.fromRGBO(229, 229, 229, 0.7),
-                    ),
-                    const SizedBox(height: 12.0),
-                  ],
+          for (int i = 0; i < 3; i++)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Hoje, 05 Set',
+                  style: AppStyles.lastReleasesDateStyle,
                 ),
-            ],
-          ),
+                const SizedBox(height: 12.0),
+                for (int i = 0; i < 3; i++)
+                  Column(
+                    children: [
+                      const LastReleasesHistoryItem(),
+                      const SizedBox(height: 12.0),
+                      Container(
+                        height: 1.0,
+                        color: const Color.fromRGBO(229, 229, 229, 0.7),
+                      ),
+                      const SizedBox(height: 12.0),
+                    ],
+                  ),
+              ],
+            ),
         ],
       ),
     );

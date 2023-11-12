@@ -2,9 +2,7 @@ import 'package:app_flutter/components/navigation_bar.dart';
 import 'package:app_flutter/screens/home_page.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({

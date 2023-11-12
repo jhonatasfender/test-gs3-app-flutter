@@ -52,6 +52,7 @@ class MyFavoritesWidget extends StatelessWidget {
           child: const SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 MyFavoritesOptionItem(
                   icon: 'assets/icons/virtual-card.svg',

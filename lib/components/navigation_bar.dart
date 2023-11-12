@@ -1,48 +1,81 @@
-import 'dart:ffi';
-
+import 'dart:io' show Platform;
 import 'package:app_flutter/utils/styles.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
+import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomNavigationBar extends StatelessWidget {
-  const CustomNavigationBar({
-    Key? key,
-  }) : super(key: key);
+  const CustomNavigationBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    bool isIOS = Platform.isIOS;
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      height: 90,
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(35.0),
-          topRight: Radius.circular(35.0),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black,
-            blurRadius: 1,
-            spreadRadius: 0,
-            offset: Offset(0, 4),
-          ),
-          BoxShadow(
-            color: Colors.white,
-            blurRadius: 10,
-            spreadRadius: 5,
-          ),
-        ],
-      ),
+      height: 100,
+      width: double.infinity,
+      decoration: _buildContainerDecoration(isIOS),
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          NavBarItem(iconPath: 'assets/icons/home.svg', label: 'Home'),
+          NavBarItem(
+            iconPath: 'assets/icons/home.svg',
+            label: 'Home',
+            active: true,
+          ),
           NavBarItem(iconPath: 'assets/icons/invoice.svg', label: 'Fatura'),
           NavBarItem(iconPath: 'assets/icons/card.svg', label: 'Cartão'),
           NavBarItem(iconPath: 'assets/icons/shop.svg', label: 'Shop'),
         ],
       ),
     );
+  }
+
+  BoxDecoration _buildContainerDecoration(bool isIOS) {
+    return BoxDecoration(
+      color: Colors.white,
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(35.0),
+        topRight: Radius.circular(35.0),
+      ),
+      boxShadow: isIOS ? _buildIOSBoxShadow() : _buildAndroidBoxShadow(),
+    );
+  }
+
+  List<BoxShadow> _buildIOSBoxShadow() {
+    return [
+      const BoxShadow(
+        color: Colors.black,
+        blurRadius: 9,
+        spreadRadius: 3,
+        offset: const Offset(0, 3),
+        inset: true,
+      ),
+      const BoxShadow(
+        color: Colors.white,
+        blurRadius: 10,
+        spreadRadius: 2,
+        inset: true,
+      ),
+    ];
+  }
+
+  List<BoxShadow> _buildAndroidBoxShadow() {
+    return [
+      const BoxShadow(
+        color: Colors.black,
+        blurRadius: 9,
+        spreadRadius: 0,
+        inset: true,
+      ),
+      const BoxShadow(
+        color: Colors.white,
+        blurRadius: 10,
+        spreadRadius: 7,
+        inset: true,
+      ),
+    ];
   }
 }
 

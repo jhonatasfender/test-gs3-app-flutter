@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:app_flutter/components/badge.dart';
 import 'package:app_flutter/components/card_item.dart';
 import 'package:app_flutter/screens/last_releases_widget.dart';
@@ -39,7 +40,7 @@ class HomePageBody extends StatelessWidget {
               Color.fromRGBO(60, 106, 178, 1),
               Color.fromRGBO(255, 255, 255, 1),
             ],
-            stops: [0, 0.6],
+            stops: [0, 0.4],
           ),
         ),
         child: Column(
@@ -48,6 +49,7 @@ class HomePageBody extends StatelessWidget {
             buildCardSection(),
             buildDivider(),
             const MyFavoritesWidget(),
+            const SizedBox(height: 15),
             buildDivider(),
             const LastReleasesWidget(),
           ],
@@ -59,7 +61,7 @@ class HomePageBody extends StatelessWidget {
   Widget buildTopHeader(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        top: MediaQuery.of(context).padding.top + 13,
+        top: math.max(0, MediaQuery.of(context).padding.top - 5),
       ),
       child: Container(
         padding: const EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
@@ -173,7 +175,7 @@ class HomePageBody extends StatelessWidget {
     required String availableLimit,
     required String bestPurchaseDay,
   }) {
-    return CardItem(
+    return CreditCard(
       gradientColors: gradientColors,
       imagePath: imagePath,
       points: points,
@@ -187,7 +189,7 @@ class HomePageBody extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
       height: 1,
-      color: const Color(0xFFe5e5e5b2),
+      color: const Color(0xffe5e5e5b2),
     );
   }
 }

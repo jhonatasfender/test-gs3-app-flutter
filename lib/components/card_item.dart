@@ -1,7 +1,7 @@
 import 'package:app_flutter/utils/styles.dart';
 import 'package:flutter/material.dart';
 
-class CardItem extends StatefulWidget {
+class CreditCard extends StatefulWidget {
   final List<Color> gradientColors;
   final String imagePath;
   final String points;
@@ -9,7 +9,7 @@ class CardItem extends StatefulWidget {
   final String availableLimit;
   final String bestPurchaseDay;
 
-  const CardItem({
+  const CreditCard({
     Key? key,
     required this.gradientColors,
     required this.imagePath,
@@ -20,10 +20,10 @@ class CardItem extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CardItemState createState() => _CardItemState();
+  CreditCardState createState() => CreditCardState();
 }
 
-class _CardItemState extends State<CardItem> {
+class CreditCardState extends State<CreditCard> {
   bool isLimitVisible = true;
 
   @override
@@ -32,10 +32,7 @@ class _CardItemState extends State<CardItem> {
       decoration: _buildGradientDecoration(),
       width: 301,
       height: 140,
-      constraints: const BoxConstraints(
-        minWidth: 301.0,
-        minHeight: 140.0,
-      ),
+      constraints: const BoxConstraints(minWidth: 301.0, minHeight: 140.0),
       margin: const EdgeInsets.only(right: 15.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,20 +62,9 @@ class _CardItemState extends State<CardItem> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildLogo(),
+          _buildCardLogo(),
           _buildPointsAndCardName(),
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                isLimitVisible = !isLimitVisible;
-              });
-            },
-            child: const Icon(
-              Icons.remove_red_eye,
-              size: 24.0,
-              color: Colors.white,
-            ),
-          ),
+          _buildVisibilityToggle(),
         ],
       ),
     );
@@ -93,44 +79,26 @@ class _CardItemState extends State<CardItem> {
   }
 
   Widget _buildBottomRow() {
-    return isLimitVisible
-        ? _buildColumn('Limite disponível', widget.availableLimit)
-        : _buildPointsRow();
-  }
-
-  Widget _buildColumn(String title, String value) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 10.0),
-      child: Column(
+    return Flexible(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: AppStyles.buildTextStyle(8, FontWeight.normal),
-          ),
-          const SizedBox(height: 4.0),
-          Text(
-            value,
-            style: AppStyles.cardSubtitleStyle,
-          ),
+          Expanded(child: _buildLimitContainer()),
+          Expanded(child: _buildPurchaseDayContainer()),
         ],
       ),
     );
   }
 
-  Widget _buildLogo() {
+  Widget _buildCardLogo() {
     return Container(
       width: 88.0,
       height: 56.0,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4.0),
       ),
-      child: Image.asset(
-        widget.imagePath,
-        width: 88.0,
-        height: 56.0,
-      ),
+      child: Image.asset(widget.imagePath, width: 88.0, height: 56.0),
     );
   }
 
@@ -143,31 +111,100 @@ class _CardItemState extends State<CardItem> {
         children: [
           _buildPointsRow(),
           const SizedBox(height: 6.0),
-          Text(
-            widget.cardName,
-            style: AppStyles.cardTitleStyle,
-          ),
+          Text(widget.cardName, style: _cardTitleTextStyle()),
         ],
       ),
     );
   }
 
-  Widget _buildPointsRow({int numberPoints = 4}) {
+  Widget _buildVisibilityToggle() {
+    return GestureDetector(
+      onTap: _toggleLimitVisibility,
+      child: const Icon(Icons.remove_red_eye, size: 24.0, color: Colors.white),
+    );
+  }
+
+  Widget _buildLimitContainer() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 10.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Limite disponível', style: _smallTextStyle()),
+          const SizedBox(height: 2.0),
+          isLimitVisible
+              ? Text(widget.availableLimit, style: _cardSubtitleTextStyle())
+              : Flexible(child: _buildHiddenLimitContainer()),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHiddenLimitContainer() {
+    return Container(
+      alignment: Alignment.center,
+      height: 20,
+      child: Row(
+        children: _buildPlaceholders(numberOfPlaceholders: 6),
+      ),
+    );
+  }
+
+  Widget _buildPurchaseDayContainer() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 10.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text('Melhor dia de compra', style: _smallTextStyle()),
+          Text(widget.bestPurchaseDay, style: _cardSubtitleTextStyle()),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPointsRow() {
     return Row(
       children: [
-        for (int i = 0; i < numberPoints; i++)
-          Container(
-            width: 8.0,
-            height: 8.0,
-            margin: const EdgeInsets.only(right: 6.0),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-            ),
-          ),
+        ..._buildPlaceholders(),
         const SizedBox(width: 6.0),
-        Text(widget.points, style: AppStyles.cardTitleStyle),
+        Expanded(child: Text(widget.points, style: _cardTitleTextStyle())),
       ],
     );
+  }
+
+  List<Widget> _buildPlaceholders({int numberOfPlaceholders = 4}) {
+    return List.generate(
+      numberOfPlaceholders,
+      (index) => Container(
+        width: 8.0,
+        height: 8.0,
+        margin: const EdgeInsets.only(right: 6.0),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+        ),
+      ),
+    );
+  }
+
+  void _toggleLimitVisibility() {
+    setState(() {
+      isLimitVisible = !isLimitVisible;
+    });
+  }
+
+  TextStyle _smallTextStyle() {
+    return AppStyles.buildTextStyle(8, FontWeight.normal);
+  }
+
+  TextStyle _cardTitleTextStyle() {
+    return AppStyles.cardTitleStyle;
+  }
+
+  TextStyle _cardSubtitleTextStyle() {
+    return AppStyles.cardSubtitleStyle;
   }
 }
